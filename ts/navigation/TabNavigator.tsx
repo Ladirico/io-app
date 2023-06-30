@@ -7,7 +7,7 @@ import { IOColors } from "../components/core/variables/IOColors";
 import LoadingSpinnerOverlay from "../components/LoadingSpinnerOverlay";
 import I18n from "../i18n";
 import MessagesHomeScreen from "../screens/messages/MessagesHomeScreen";
-import ProfileMainScreen from "../screens/profile/ProfileMainScreen";
+// import ProfileMainScreen from "../screens/profile/ProfileMainScreen";
 import ServicesHomeScreen from "../screens/services/ServicesHomeScreen";
 import WalletHomeScreen from "../screens/wallet/WalletHomeScreen";
 import { useIOSelector } from "../store/hooks";
@@ -15,6 +15,7 @@ import { StartupStatusEnum, isStartupLoaded } from "../store/reducers/startup";
 import variables from "../theme/variables";
 import { isDesignSystemEnabledSelector } from "../store/reducers/persistedPreferences";
 import { TabIconComponent } from "../components/ui/TabIconComponent";
+import NewProfileMainScreen from "../screens/profile/NewProfileMainScreen";
 import { MainTabParamsList } from "./params/MainTabParamsList";
 import ROUTES from "./routes";
 
@@ -128,7 +129,7 @@ export const MainTabNavigator = () => {
         />
         <Tab.Screen
           name={ROUTES.PROFILE_MAIN}
-          component={ProfileMainScreen}
+          component={NewProfileMainScreen}
           options={{
             title: I18n.t("global.navigator.profile"),
             tabBarIcon: ({ color, focused }) => (
