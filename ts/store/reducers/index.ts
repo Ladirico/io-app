@@ -51,6 +51,7 @@ import persistedPreferencesReducer, {
 } from "./persistedPreferences";
 import preferencesReducer from "./preferences";
 import profileReducer from "./profile";
+import newProfileReducer from "./newProfile";
 import searchReducer from "./search";
 import startupReducer from "./startup";
 import { GlobalState } from "./types";
@@ -136,7 +137,8 @@ export const appReducer: Reducer<GlobalState, Action> = combineReducers<
   content: contentReducer,
   emailValidation: emailValidationReducer,
   crossSessions: crossSessionsReducer,
-  lollipop: lollipopPersistor
+  lollipop: lollipopPersistor,
+  newProfile: newProfileReducer
 });
 
 export function createRootReducer(
@@ -215,6 +217,9 @@ export function createRootReducer(
                 // eslint-disable-next-line no-underscore-dangle
                 _persist: state.wallet.wallets._persist
               }
+            },
+            newProfile: {
+              ...state.newProfile
             },
             lollipop: {
               ...initialLollipopState,

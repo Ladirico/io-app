@@ -157,6 +157,7 @@ import {
   keychainError
 } from "./../store/storages/keychain";
 import { watchMessagePrecondition } from "./messages/watchMessagePrecondition";
+import { provaSaga } from "./newProfile";
 
 const WAIT_INITIALIZE_SAGA = 5000 as Millisecond;
 const navigatorPollingTime = 125 as Millisecond;
@@ -405,7 +406,7 @@ export function* initializeApplicationSaga(
 
   // Start watching for requests of refresh the profile
   yield* fork(watchProfileRefreshRequestsSaga, backendClient.getProfile);
-
+  yield* fork(provaSaga, backendClient.getProfileInfo);
   // Start watching for requests about session and support token
   yield* fork(
     watchCheckSessionSaga,

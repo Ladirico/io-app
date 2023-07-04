@@ -264,6 +264,14 @@ export function BackendClient(
     response_decoder: getUserProfileDefaultDecoder()
   };
 
+  const getProfileInfoT: GetUserProfileT = {
+    method: "get",
+    url: () => "/api/v1/profile",
+    query: _ => ({}),
+    headers: tokenHeaderProducer,
+    response_decoder: getUserProfileDefaultDecoder()
+  };
+
   const createOrUpdateProfileT: UpdateProfileT = {
     method: "post",
     url: () => "/api/v1/profile",
@@ -412,6 +420,9 @@ export function BackendClient(
     getProfile: withBearerToken(createFetchRequestForApi(getProfileT, options)),
     createOrUpdateProfile: withBearerToken(
       createFetchRequestForApi(createOrUpdateProfileT, options)
+    ),
+    getProfileInfo: withBearerToken(
+      createFetchRequestForApi(getProfileInfoT, options)
     ),
     getUserMetadata: withBearerToken(
       createFetchRequestForApi(getUserMetadataT, options)

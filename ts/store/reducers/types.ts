@@ -41,6 +41,7 @@ export type GlobalState = Readonly<{
   notifications: NotificationsState;
   onboarding: OnboardingState;
   profile: ProfileState;
+  newProfile: ProfileState;
   userDataProcessing: UserDataProcessingState;
   wallet: WalletState;
   preferences: PreferencesState;

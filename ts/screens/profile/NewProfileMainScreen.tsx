@@ -1,12 +1,16 @@
 import React from "react";
 import { List } from "native-base";
+import { connect } from "react-redux";
 import I18n from "../../i18n";
 import TopScreenComponent from "../../components/screens/TopScreenComponent";
 import { ContextualHelpPropsMarkdown } from "../../components/screens/BaseScreenComponent";
 import ScreenContent from "../../components/screens/ScreenContent";
 import ItemWithIconComponent from "../../components/screens/ItemWithIconComponent";
+import { GlobalState } from "../../store/reducers/types";
+import { profileInfoSelector } from "../../store/reducers/newProfile";
+type Props = ReturnType<typeof mapStateToProps>;
 
-const NewProfileMainScreen = () => {
+const NewProfileMainScreen: React.FC<Props> = (props: Props) => {
   const contextualHelpMarkdown: ContextualHelpPropsMarkdown = {
     title: "services.contextualHelpTitle",
     body: "services.contextualHelpContent"
@@ -27,21 +31,21 @@ const NewProfileMainScreen = () => {
               iconPosition="LEFT"
               iconName={"profile"}
               title={I18n.t("profile.data.list.nameSurname")}
-              subTitle="Martina Rossi"
+              subTitle={props.userInfo.namesurname}
               testID="name-surname"
             />
             <ItemWithIconComponent
               iconPosition="LEFT"
               iconName={"creditCard"}
               title={I18n.t("profile.fiscalCode.fiscalCode")}
-              subTitle="MEDCLA76T80F463V"
+              subTitle={props.userInfo.fiscal_code}
               testID="fiscal-code"
             />
             <ItemWithIconComponent
               iconPosition="LEFT"
               iconName={"email"}
               title={I18n.t("profile.data.list.email")}
-              subTitle="martina.rossi@pagopa.it"
+              subTitle={props.userInfo.email}
               testID="email"
             />
           </List>
@@ -50,4 +54,9 @@ const NewProfileMainScreen = () => {
     </>
   );
 };
-export default NewProfileMainScreen;
+
+const mapStateToProps = (state: GlobalState) => ({
+  userInfo: profileInfoSelector(state)
+});
+
+export default connect(mapStateToProps)(NewProfileMainScreen);
