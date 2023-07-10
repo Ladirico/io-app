@@ -1,62 +1,53 @@
-import React from "react";
-import { List } from "native-base";
-import { connect } from "react-redux";
+import React, { useEffect } from "react";
+import * as pot from "@pagopa/ts-commons/lib/pot";
+import { constNull } from "fp-ts/lib/function";
+import { useNavigation } from "@react-navigation/native";
 import I18n from "../../i18n";
-import TopScreenComponent from "../../components/screens/TopScreenComponent";
-import { ContextualHelpPropsMarkdown } from "../../components/screens/BaseScreenComponent";
-import ScreenContent from "../../components/screens/ScreenContent";
-import ItemWithIconComponent from "../../components/screens/ItemWithIconComponent";
-import { GlobalState } from "../../store/reducers/types";
 import { profileInfoSelector } from "../../store/reducers/newProfile";
-type Props = ReturnType<typeof mapStateToProps>;
+import { useIODispatch, useIOSelector } from "../../store/hooks";
+import { profileInfoLoad } from "../../store/actions/newProfile";
+import { LoadingErrorComponent } from "../../features/bonus/bonusVacanze/components/loadingErrorScreen/LoadingErrorComponent";
+import GenericErrorComponent from "../../features/fci/components/GenericErrorComponent";
+import NewProfileSuccessScreen from "./NewProfileSuccessScreen";
 
-const NewProfileMainScreen: React.FC<Props> = (props: Props) => {
-  const contextualHelpMarkdown: ContextualHelpPropsMarkdown = {
-    title: "services.contextualHelpTitle",
-    body: "services.contextualHelpContent"
-  };
+const NewProfileMainScreen: React.FC = () => {
+  const dispatch = useIODispatch();
+  const userInfo = useIOSelector(profileInfoSelector);
+  const navigation = useNavigation();
 
-  return (
-    <>
-      <TopScreenComponent
-        goBack={true}
-        accessibilityLabel="Profilo"
-        headerTitle="Profilo"
-        contextualHelpMarkdown={contextualHelpMarkdown}
-        faqCategories={["profile"]}
-      >
-        <ScreenContent title="Profilo">
-          <List withContentLateralPadding>
-            <ItemWithIconComponent
-              iconPosition="LEFT"
-              iconName={"profile"}
-              title={I18n.t("profile.data.list.nameSurname")}
-              subTitle={props.userInfo.namesurname}
-              testID="name-surname"
-            />
-            <ItemWithIconComponent
-              iconPosition="LEFT"
-              iconName={"creditCard"}
-              title={I18n.t("profile.fiscalCode.fiscalCode")}
-              subTitle={props.userInfo.fiscal_code}
-              testID="fiscal-code"
-            />
-            <ItemWithIconComponent
-              iconPosition="LEFT"
-              iconName={"email"}
-              title={I18n.t("profile.data.list.email")}
-              subTitle={props.userInfo.email}
-              testID="email"
-            />
-          </List>
-        </ScreenContent>
-      </TopScreenComponent>
-    </>
+  useEffect(() => {
+    dispatch(profileInfoLoad.request());
+  }, [dispatch]);
+
+  const LoadingComponent = () => (
+    <LoadingErrorComponent
+      isLoading={true}
+      loadingCaption={""}
+      onRetry={constNull}
+      testID={"FciRouterLoadingScreenTestID"}
+    />
+  );
+
+  const renderErrorComponent = () => (
+    <GenericErrorComponent
+      title={I18n.t("features.fci.errors.generic.default.title")}
+      subTitle={I18n.t("features.fci.errors.generic.default.subTitle")}
+      onPress={() => navigation.goBack()}
+      testID="GenericErrorComponentTestID"
+    />
+  );
+
+  return pot.fold(
+    userInfo,
+    () => <LoadingComponent />,
+    () => <LoadingComponent />,
+    () => <LoadingComponent />,
+    renderErrorComponent,
+    () => <NewProfileSuccessScreen />,
+    () => <LoadingComponent />,
+    () => <LoadingComponent />,
+    () => renderErrorComponent()
   );
 };
 
-const mapStateToProps = (state: GlobalState) => ({
-  userInfo: profileInfoSelector(state)
-});
-
-export default connect(mapStateToProps)(NewProfileMainScreen);
+export default NewProfileMainScreen;

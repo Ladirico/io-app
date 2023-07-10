@@ -29,6 +29,7 @@ import { UserDataProcessingState } from "./userDataProcessing";
 import { UserMetadataState } from "./userMetadata";
 import { WalletState } from "./wallet";
 import { StartupState } from "./startup";
+import { NewProfileState } from "./newProfile";
 
 export type GlobalState = Readonly<{
   appState: AppState;
@@ -41,7 +42,7 @@ export type GlobalState = Readonly<{
   notifications: NotificationsState;
   onboarding: OnboardingState;
   profile: ProfileState;
-  newProfile: ProfileState;
+  newProfile: NewProfileState;
   userDataProcessing: UserDataProcessingState;
   wallet: WalletState;
   preferences: PreferencesState;
